@@ -501,9 +501,21 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Subscription Growth -->
         <div class="stat-card">
-          <h3 class="text-lg font-semibold text-primary mb-6">
-            Subscription Growth
-          </h3>
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-semibold text-primary">
+              Subscription Growth
+            </h3>
+            <select
+              class="filter-select"
+              id="growthYearFilter"
+              onchange="updateGrowthChart()"
+              style="min-width: 120px"
+            >
+              <option value="2025" selected>2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+            </select>
+          </div>
           <div class="chart-bar">
             <div class="bar" style="height: 45%" title="Jan"></div>
             <div class="bar" style="height: 58%" title="Feb"></div>
@@ -1111,6 +1123,13 @@
 
         console.log("Filtering data:", { month, startDate, endDate, plan });
         // Add your filtering logic here
+      }
+
+      // Update growth chart based on year
+      function updateGrowthChart() {
+        const year = document.getElementById("growthYearFilter").value;
+        console.log("Selected year:", year);
+        // Add your chart update logic here
       }
 
       // Table status filter
