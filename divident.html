@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monthly Dividends - Dexpress</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .logo {
+        display: flex;
+        justify-self: start;
+        align-items: center;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #666666;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 24px;
+        transition: color 0.2s;
+      }
+
+      .back-link:hover {
+        color: #000000;
+      }
+
+      .stat-card {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 24px;
+        transition: all 0.2s ease;
+      }
+
+      .stat-card:hover {
+        border-color: #000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .table-container {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead {
+        background: #fafafa;
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #666666;
+      }
+
+      td {
+        padding: 16px;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 14px;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover {
+        background: #fafafa;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .badge-paid {
+        background: #000;
+        color: #ffffff;
+      }
+
+      .badge-pending {
+        background: #f5f5f5;
+        color: #666666;
+        border: 1px solid #e5e5e5;
+      }
+
+      .text-primary {
+        color: #000;
+      }
+
+      .page-filters {
+        background: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 24px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .filter-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .filter-input,
+      .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        font-size: 14px;
+        background: #ffffff;
+        min-width: 150px;
+      }
+
+      .filter-input:focus,
+      .filter-select:focus {
+        outline: none;
+        border-color: #000000;
+      }
+
+      .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        font-size: 13px;
+        min-width: 250px;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #000000;
+      }
+    </style>
+  </head>
+  <body class="bg-white p-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/LONG-LOGO.svg" alt="Dexpress" class="w-full h-10" />
+        </a>
+      </div>
+
+      <!-- Back Link -->
+      <a href="index.html" class="back-link" style="margin-top: 24px">
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          ></path>
+        </svg>
+        Back to Dashboard
+      </a>
+
+      <!-- Header -->
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold mb-2" style="color: #000">
+          Monthly Dividend Payments
+        </h1>
+        <p class="text-gray-600">
+          Overview of dividend distributions for October 2025
+        </p>
+      </div>
+
+      <!-- Page Filters -->
+      <div class="page-filters">
+        <div class="filter-group">
+          <label>Month</label>
+          <select
+            class="filter-select"
+            id="monthFilter"
+            onchange="filterData()"
+          >
+            <option value="10" selected>October</option>
+            <option value="09">September</option>
+            <option value="08">August</option>
+            <option value="07">July</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Plan Type</label>
+          <select
+            class="filter-select"
+            id="planFilter"
+            onchange="filterData()"
+          >
+            <option value="">All Plans</option>
+            <option value="basic">Basic</option>
+            <option value="standard">Standard</option>
+            <option value="premium">Premium</option>
+            <option value="elite">Elite</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Status</label>
+          <select
+            class="filter-select"
+            id="statusFilter"
+            onchange="filterData()"
+          >
+            <option value="">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Dividends -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-600">
+              Total Dividends (Oct)
+            </h3>
+            <svg
+              class="w-5 h-5"
+              style="color: #000"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <div class="text-3xl font-bold text-primary mb-2">
+            <img
+              src="assets/dirham.svg"
+              alt="AED"
+              class="inline-block w-5 h-5 -mt-1 mr-1"
+            />48,450
+          </div>
+          <div class="text-sm text-gray-600">
+            <span class="text-primary font-medium">100%</span> distributed
+          </div>
+        </div>
+
+        <!-- Total Members -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-600">Active Members</h3>
+            <svg
+              class="w-5 h-5"
+              style="color: #000"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              ></path>
+            </svg>
+          </div>
+          <div class="text-3xl font-bold text-primary mb-2">8</div>
+          <div class="text-sm text-gray-600">
+            Receiving dividends this month
+          </div>
+        </div>
+
+        <!-- Avg Dividend -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-600">Avg Dividend/Member</h3>
+            <svg
+              class="w-5 h-5"
+              style="color: #000"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              ></path>
+            </svg>
+          </div>
+          <div class="text-3xl font-bold text-primary mb-2">
+            <img
+              src="assets/dirham.svg"
+              alt="AED"
+              class="inline-block w-5 h-5 -mt-1 mr-1"
+            />6,056
+          </div>
+          <div class="text-sm text-gray-600">Per member this month</div>
+        </div>
+      </div>
+
+      <!-- Dividend Recipients Table -->
+      <div class="table-container">
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-primary">
+              Dividend Recipients - October 2025
+            </h3>
+            <input
+              type="text"
+              class="search-input"
+              id="searchInput"
+              placeholder="Search by name, email..."
+              onkeyup="searchTable()"
+            />
+          </div>
+        </div>
+
+        <table id="dividendTable">
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Email</th>
+              <th>Plan</th>
+              <th>Investment</th>
+              <th>Dividend Amount</th>
+              <th>Payment Status</th>
+              <th>Payment Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-plan="elite" data-status="paid">
+              <td class="font-medium text-primary">Rahul Kumar</td>
+              <td class="text-gray-600">rahul.k@example.com</td>
+              <td class="text-primary">Elite</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />50,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />3,000
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="premium" data-status="paid">
+              <td class="font-medium text-primary">Priya Sharma</td>
+              <td class="text-gray-600">priya.s@example.com</td>
+              <td class="text-primary">Premium</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />25,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />1,250
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="basic" data-status="paid">
+              <td class="font-medium text-primary">Sneha Reddy</td>
+              <td class="text-gray-600">sneha.r@example.com</td>
+              <td class="text-primary">Basic</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />6,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />300
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="premium" data-status="paid">
+              <td class="font-medium text-primary">Vikram Singh</td>
+              <td class="text-gray-600">vikram.s@example.com</td>
+              <td class="text-primary">Premium</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />25,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />1,250
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="elite" data-status="paid">
+              <td class="font-medium text-primary">Anjali Gupta</td>
+              <td class="text-gray-600">anjali.g@example.com</td>
+              <td class="text-primary">Elite</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />50,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />3,000
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="basic" data-status="paid">
+              <td class="font-medium text-primary">Mohamed Ali</td>
+              <td class="text-gray-600">mohamed.a@example.com</td>
+              <td class="text-primary">Basic</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />6,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />300
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="standard" data-status="paid">
+              <td class="font-medium text-primary">Sarah Johnson</td>
+              <td class="text-gray-600">sarah.j@example.com</td>
+              <td class="text-primary">Standard</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />12,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />600
+              </td>
+              <td><span class="badge badge-paid">Paid</span></td>
+              <td class="text-gray-600">Oct 1, 2025</td>
+            </tr>
+            <tr data-plan="elite" data-status="pending">
+              <td class="font-medium text-primary">David Chen</td>
+              <td class="text-gray-600">david.c@example.com</td>
+              <td class="text-primary">Elite</td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />50,000
+              </td>
+              <td class="font-medium text-primary">
+                <img
+                  src="assets/dirham.svg"
+                  alt="AED"
+                  class="inline-block w-5 h-5 -mt-1 mr-1"
+                />3,000
+              </td>
+              <td><span class="badge badge-pending">Pending</span></td>
+              <td class="text-gray-600">Processing...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // Filter data
+      function filterData() {
+        const month = document.getElementById("monthFilter").value;
+        const plan = document.getElementById("planFilter").value.toLowerCase();
+        const status = document.getElementById("statusFilter").value.toLowerCase();
+
+        const rows = document.querySelectorAll("#dividendTable tbody tr");
+
+        rows.forEach((row) => {
+          const rowPlan = row.getAttribute("data-plan");
+          const rowStatus = row.getAttribute("data-status");
+
+          let showRow = true;
+
+          if (plan && rowPlan !== plan) {
+            showRow = false;
+          }
+
+          if (status && rowStatus !== status) {
+            showRow = false;
+          }
+
+          row.style.display = showRow ? "" : "none";
+        });
+      }
+
+      // Search table
+      function searchTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("dividendTable");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+          let txtValue = "";
+          const cells = rows[i].getElementsByTagName("td");
+
+          for (let j = 0; j < cells.length; j++) {
+            txtValue += cells[j].textContent || cells[j].innerText;
+          }
+
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            rows[i].style.display = "";
+          } else {
+            rows[i].style.display = "none";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

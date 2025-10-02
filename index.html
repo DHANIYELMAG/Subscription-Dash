@@ -345,7 +345,7 @@
       <!-- Page Filters -->
       <div class="page-filters">
         <div class="filter-group">
-          <label>Month</label>
+          <!-- <label>Month</label> -->
           <select
             class="filter-select"
             id="monthFilter"
@@ -360,7 +360,7 @@
         </div>
 
         <div class="filter-group">
-          <label>Date Range</label>
+          <!-- <label>Date Range</label> -->
           <input
             type="date"
             class="filter-input"
@@ -370,7 +370,7 @@
         </div>
 
         <div class="filter-group">
-          <label>To</label>
+          <!-- <label>To</label> -->
           <input
             type="date"
             class="filter-input"
@@ -584,6 +584,40 @@
               months
             </p>
           </div>
+          <a
+            href="divident.html"
+            style="
+              background: rgba(255, 255, 255, 0.15);
+              color: #ffffff;
+              padding: 12px 24px;
+              border-radius: 8px;
+              text-decoration: none;
+              font-weight: 600;
+              font-size: 14px;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              transition: all 0.3s;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+            "
+            onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'"
+            onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'"
+          >
+            View Monthly Dividends
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </a>
         </div>
 
         <div class="dividend-grid">
